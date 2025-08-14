@@ -1,0 +1,96 @@
+import { StyleSheet } from 'react-native';
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    paddingTop: 60,
+    paddingBottom: 80,
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 40,
+    textAlign: 'center',
+  },
+  formContainer: {
+    width: '100%',
+    maxWidth: 300,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 8,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  inputError: {
+    borderColor: '#ff4444',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  buttonDisabled: {
+    backgroundColor: '#cccccc',
+    shadowOpacity: 0.1,
+    elevation: 1,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  errorMessage: {
+    color: '#ff4444',
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  testAccountHint: {
+    color: '#666',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 20,
+    fontStyle: 'italic',
+  },
+});
