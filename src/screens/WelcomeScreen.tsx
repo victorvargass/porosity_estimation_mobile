@@ -89,9 +89,6 @@ export default function WelcomeScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.testAccountHint}>
-          {strings.welcomeScreen.testAccount}
-        </Text>
       </View>
     </View>
   );
