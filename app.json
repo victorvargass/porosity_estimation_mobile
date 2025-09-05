@@ -16,7 +16,6 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Esta aplicación necesita acceso al micrófono para realizar mediciones de porosidad.",
-        "NSPhotoLibraryUsageDescription": "Esta aplicación necesita acceso a la biblioteca de medios para guardar grabaciones de audio.",
         "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceso a la ubicación para registrar las coordenadas GPS de las mediciones de porosidad."
       }
     },
@@ -29,9 +28,6 @@
       "package": "com.anonymous.porosity_estimation_mobile",
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.READ_MEDIA_AUDIO",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION"
       ]
@@ -44,13 +40,6 @@
         "expo-audio",
         {
           "microphonePermission": "Esta aplicación necesita acceso al micrófono para realizar mediciones de porosidad."
-        }
-      ],
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Esta aplicación necesita acceso a la biblioteca de medios para guardar grabaciones de audio.",
-          "savePhotosPermission": "Esta aplicación necesita acceso a la biblioteca de medios para guardar grabaciones de audio."
         }
       ],
       [
