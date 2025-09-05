@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, BackHandler } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, BackHandler, Linking } from 'react-native';
 import { Audio } from 'expo-av';
+import { AudioModule } from 'expo-audio';
 import AudioRecorder from '../components/AudioRecorder';
 import WhiteNoisePlayer from '../components/WhiteNoisePlayer';
 import { AudioDevice, DualChannelRecordingResult, AudioLevels } from '../types/DualChannelAudio';
@@ -33,6 +34,29 @@ export default function DualChannelRecordingScreen({ navigation, route }: any) {
   const [deviceCheckComplete, setDeviceCheckComplete] = useState(false);
   const [locationData, setLocationData] = useState<LocationData | null>(receivedLocationData);
   const [isWhiteNoisePlaying, setIsWhiteNoisePlaying] = useState(false);
+
+  // Verificar y solicitar permisos de micrófono
+  const ensureMicrophonePermission = async (): Promise<boolean> => {
+    try {
+      const current = await AudioModule.getRecordingPermissionsAsync();
+      if (current.granted) return true;
+
+      const requested = await AudioModule.requestRecordingPermissionsAsync();
+      if (requested.granted) return true;
+
+      Alert.alert(
+        strings.audioRecorder.permissionsRequired,
+        strings.audioRecorder.microphonePermissionMessage,
+        [
+          { text: strings.common.cancel, style: 'cancel' },
+          { text: 'Abrir ajustes', onPress: () => { try { Linking.openSettings?.(); } catch (e) {} } }
+        ]
+      );
+      return false;
+    } catch (e) {
+      return false;
+    }
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -118,13 +142,18 @@ export default function DualChannelRecordingScreen({ navigation, route }: any) {
     setAudioLevels(levels);
   };
 
-  const handleStartStopRecording = () => {
+  const handleStartStopRecording = async () => {
     if (isRecording) {
       if (recordingTime < requiredRecordingSeconds) {
         return;
       }
       setIsRecording(false);
     } else {
+      // Verificar permisos de micrófono antes de iniciar
+      const hasPermission = await ensureMicrophonePermission();
+      if (!hasPermission) {
+        return;
+      }
       // Validar que el ruido blanco esté reproduciéndose antes de iniciar grabación
       if (!isWhiteNoisePlaying) {
         Alert.alert(

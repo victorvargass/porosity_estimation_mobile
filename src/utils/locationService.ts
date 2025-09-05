@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import { Alert } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 
 export interface LocationData {
   latitude: number;
@@ -34,7 +34,10 @@ export const requestLocationPermissions = async (): Promise<boolean> => {
       Alert.alert(
         'Permisos de Ubicación',
         'Para registrar la ubicación de las mediciones, necesitamos acceso a tu ubicación. Puedes habilitarlo en la configuración de la aplicación.',
-        [{ text: 'OK' }]
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Abrir ajustes', onPress: () => { try { Linking.openSettings?.(); } catch (e) {} } }
+        ]
       );
       return false;
     }
@@ -44,7 +47,10 @@ export const requestLocationPermissions = async (): Promise<boolean> => {
     Alert.alert(
       'Error',
       'No se pudieron solicitar los permisos de ubicación. Inténtalo de nuevo.',
-      [{ text: 'OK' }]
+      [
+        { text: 'OK' },
+        { text: 'Abrir ajustes', onPress: () => { try { Linking.openSettings?.(); } catch (e) {} } }
+      ]
     );
     return false;
   }
@@ -72,7 +78,19 @@ export const getCurrentLocation = async (): Promise<LocationData | LocationError
       Alert.alert(
         'Servicios de Ubicación',
         'Los servicios de ubicación están deshabilitados. Por favor, habilítalos en la configuración del dispositivo.',
-        [{ text: 'OK' }]
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Abrir ajustes', onPress: () => {
+              try {
+                if (Platform.OS === 'android') {
+                  Linking.openSettings?.();
+                } else {
+                  Linking.openURL('App-Prefs:root=Privacy&path=LOCATION');
+                }
+              } catch (e) {}
+            }
+          }
+        ]
       );
       return {
         error: 'Servicios de ubicación deshabilitados',

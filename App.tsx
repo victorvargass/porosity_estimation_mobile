@@ -1,7 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform, PermissionsAndroid } from 'react-native';
+import * as Location from 'expo-location';
+import { AudioModule } from 'expo-audio';
 
 import WelcomeScreen from '@screens/WelcomeScreen';
 import FormScreen from '@screens/FormScreen';
@@ -28,6 +30,8 @@ export default function App() {
 
   useEffect(() => {
     checkAuthStatus();
+    // Solicitar permisos al inicio
+    requestStartupPermissions();
   }, []);
 
   const checkAuthStatus = async () => {
@@ -38,6 +42,34 @@ export default function App() {
       setIsLoggedIn(false);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const requestStartupPermissions = async () => {
+    try {
+      // Android: solicitar permisos específicos
+      if (Platform.OS === 'android') {
+        const permissionsToRequest: string[] = [
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        ];
+        try {
+          await PermissionsAndroid.requestMultiple(permissionsToRequest);
+        } catch (e) {
+          // Ignorar errores de solicitud múltiple y continuar con APIs de Expo
+        }
+      }
+
+      // Micrófono (Expo Audio)
+      try {
+        await AudioModule.requestRecordingPermissionsAsync();
+      } catch (e) {}
+
+      // Ubicación (para mapas)
+      try {
+        await Location.requestForegroundPermissionsAsync();
+      } catch (e) {}
+    } catch (error) {
+      // Silencioso: no bloquear la app por permisos
     }
   };
 
